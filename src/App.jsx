@@ -9,7 +9,6 @@ function App() {
   const [isLogin, setIsLogin] = useState(true); // Toggle between login and sign-up
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState(''); // 'success' or 'error'
-  const [loginCredential, setLoginCredential] = useState({});
 
   useEffect(() => {
     // Check if user is already logged in (from localStorage, session, or API)
@@ -25,10 +24,6 @@ function App() {
     // setTimeout(() => setMessage(''), 3000); // Clear message after 3 seconds
   };
 
-  const getLoginCredential = (data) => {
-    setLoginCredential(data)
-  }
-
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
       <Notification message={message} type={messageType} />
@@ -40,11 +35,12 @@ function App() {
           {isLogin ? (
             <>
               <LoginForm
-                onSuccess={() => {
+                onSuccess={(session) => {
                   setLoggedIn(true);
                   localStorage.setItem('isLoggedIn', 'true'); // Set login status
+                  localStorage.setItem('loginCredential', JSON.stringify(session));
                 }}
-                showMessage={showMessage} getLoginCredential={getLoginCredential}
+                showMessage={showMessage}
               />
               <p className="text-sm text-center">
                 Don't have an account?{' '}
@@ -83,7 +79,7 @@ function App() {
             setLoggedIn(false);
             localStorage.removeItem('isLoggedIn'); // Remove login status
           }}
-          showMessage={showMessage} loginCredential={loginCredential}
+          showMessage={showMessage}
         />
       )}
     </div>

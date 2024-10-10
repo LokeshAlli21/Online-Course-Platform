@@ -3,6 +3,7 @@ import LoginForm from './components/LoginForm';
 import SignUpForm from './components/SignUpForm';
 import Notification from './components/Notification';
 import Dashboard from './components/Dashboard';
+import { account } from './appwrite/appwriteService';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -11,17 +12,29 @@ function App() {
   const [messageType, setMessageType] = useState(''); // 'success' or 'error'
 
   useEffect(() => {
-    // Check if user is already logged in (from localStorage, session, or API)
-    const isUserLoggedIn = localStorage.getItem('isLoggedIn');
-    if (isUserLoggedIn) {
-      setLoggedIn(true);
-    }
-  }, []);
+    // Fetch user data from account.get() to check if the user is logged in
+    const checkUserLogin = async () => {
+      try {
+        const data = await account.get();
+        if (data) {
+          setLoggedIn(true);
+          // console.log('User data:', data); // Log user data
+        } else {
+          setLoggedIn(false); // User is not logged in
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        setLoggedIn(false); // Optionally set loggedIn to false on error
+      }
+    };
 
+    checkUserLogin();
+  }, []);
+  
   const showMessage = (msg, type) => {
     setMessage(msg);
     setMessageType(type);
-    // setTimeout(() => setMessage(''), 3000); // Clear message after 3 seconds
+    setTimeout(() => setMessage(''), 3000); // Clear message after 3 seconds
   };
 
   return (
@@ -35,10 +48,8 @@ function App() {
           {isLogin ? (
             <>
               <LoginForm
-                onSuccess={(session) => {
+                onSuccess={() => {
                   setLoggedIn(true);
-                  localStorage.setItem('isLoggedIn', 'true'); // Set login status
-                  localStorage.setItem('loginCredential', JSON.stringify(session));
                 }}
                 showMessage={showMessage}
               />
@@ -77,7 +88,6 @@ function App() {
         <Dashboard
           onLogout={() => {
             setLoggedIn(false);
-            localStorage.removeItem('isLoggedIn'); // Remove login status
           }}
           showMessage={showMessage}
         />

@@ -10,6 +10,7 @@ function LoginForm({ onSuccess, showMessage }) {
     try {
       const session = await account.createEmailPasswordSession(email, password);
       console.log('Login successful:', session);
+      // localStorage.setItem('session',session)
       showMessage('Login successful!', 'success');
       onSuccess(session);
     } catch (error) {

@@ -9,6 +9,7 @@ function App() {
   const [isLogin, setIsLogin] = useState(true); // Toggle between login and sign-up
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState(''); // 'success' or 'error'
+  const [loginCredential, setLoginCredential] = useState({});
 
   useEffect(() => {
     // Check if user is already logged in (from localStorage, session, or API)
@@ -21,8 +22,12 @@ function App() {
   const showMessage = (msg, type) => {
     setMessage(msg);
     setMessageType(type);
-    setTimeout(() => setMessage(''), 3000); // Clear message after 3 seconds
+    // setTimeout(() => setMessage(''), 3000); // Clear message after 3 seconds
   };
+
+  const getLoginCredential = (data) => {
+    setLoginCredential(data)
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
@@ -39,7 +44,7 @@ function App() {
                   setLoggedIn(true);
                   localStorage.setItem('isLoggedIn', 'true'); // Set login status
                 }}
-                showMessage={showMessage}
+                showMessage={showMessage} getLoginCredential={getLoginCredential}
               />
               <p className="text-sm text-center">
                 Don't have an account?{' '}
@@ -78,7 +83,7 @@ function App() {
             setLoggedIn(false);
             localStorage.removeItem('isLoggedIn'); // Remove login status
           }}
-          showMessage={showMessage}
+          showMessage={showMessage} loginCredential={loginCredential}
         />
       )}
     </div>

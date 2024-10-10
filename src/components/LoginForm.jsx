@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { account } from '../appwrite/appwriteService';
 
-function LoginForm({ onSuccess, showMessage }) {
+function LoginForm({ onSuccess, showMessage, getLoginCredential }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -10,6 +10,7 @@ function LoginForm({ onSuccess, showMessage }) {
     try {
       const session = await account.createEmailPasswordSession(email, password);
       console.log('Login successful:', session);
+      getLoginCredential(session)
       showMessage('Login successful!', 'success');
       onSuccess();
     } catch (error) {

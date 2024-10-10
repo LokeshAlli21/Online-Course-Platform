@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LoginForm from './components/LoginForm';
 import SignUpForm from './components/SignUpForm';
 import Notification from './components/Notification';
@@ -9,6 +9,14 @@ function App() {
   const [isLogin, setIsLogin] = useState(true); // Toggle between login and sign-up
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState(''); // 'success' or 'error'
+
+  useEffect(() => {
+    // Check if user is already logged in (from localStorage, session, or API)
+    const isUserLoggedIn = localStorage.getItem('isLoggedIn');
+    if (isUserLoggedIn) {
+      setLoggedIn(true);
+    }
+  }, []);
 
   const showMessage = (msg, type) => {
     setMessage(msg);
@@ -27,7 +35,10 @@ function App() {
           {isLogin ? (
             <>
               <LoginForm
-                onSuccess={() => setLoggedIn(true)}
+                onSuccess={() => {
+                  setLoggedIn(true);
+                  localStorage.setItem('isLoggedIn', 'true'); // Set login status
+                }}
                 showMessage={showMessage}
               />
               <p className="text-sm text-center">
@@ -63,7 +74,10 @@ function App() {
       ) : (
         // Render the Dashboard component when logged in
         <Dashboard
-          onLogout={() => setLoggedIn(false)}
+          onLogout={() => {
+            setLoggedIn(false);
+            localStorage.removeItem('isLoggedIn'); // Remove login status
+          }}
           showMessage={showMessage}
         />
       )}

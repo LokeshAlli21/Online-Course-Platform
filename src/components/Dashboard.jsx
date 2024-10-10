@@ -13,19 +13,36 @@ function Dashboard({ onLogout, showMessage, loginCredential }) {
         <h2 className="text-lg text-center font-semibold text-green-500">
           Welcome to the Dashboard!
         </h2>
-        <p>User ID: {loginCredential.userId}</p>
-        <p>Email: {loginCredential.providerUid}</p>
-        <p>Provider: {loginCredential.provider}</p>
-        <p>IP Address: {loginCredential.ip}</p>
-        <p>Operating System: {loginCredential.osName} {loginCredential.osVersion}</p>
-        <p>Client: {loginCredential.clientName} {loginCredential.clientVersion}</p>
-        <p>Client Engine: {loginCredential.clientEngine} {loginCredential.clientEngineVersion}</p>
-        <p>Device Type: {loginCredential.deviceName}</p>
-        <p>Country: {loginCredential.countryName} ({loginCredential.countryCode.toUpperCase()})</p>
-        <p>Session Created: {new Date(loginCredential.$createdAt).toLocaleString()}</p>
-        <p>Session Updated: {new Date(loginCredential.$updatedAt).toLocaleString()}</p>
-        <p>Session Expiry: {new Date(loginCredential.expire).toLocaleString()}</p>
-        <p>Multi-Factor Authentication: {loginCredential.factors.join(', ')}</p>
+        {loginCredential.userId && <p>User ID: {loginCredential.userId}</p>}
+        {loginCredential.providerUid && <p>Email: {loginCredential.providerUid}</p>}
+        {loginCredential.provider && <p>Provider: {loginCredential.provider}</p>}
+        {loginCredential.ip && <p>IP Address: {loginCredential.ip}</p>}
+        {loginCredential.osName && loginCredential.osVersion && (
+            <p>Operating System: {loginCredential.osName} {loginCredential.osVersion}</p>
+        )}
+        {loginCredential.clientName && loginCredential.clientVersion && (
+            <p>Client: {loginCredential.clientName} {loginCredential.clientVersion}</p>
+        )}
+        {loginCredential.clientEngine && loginCredential.clientEngineVersion && (
+            <p>Client Engine: {loginCredential.clientEngine} {loginCredential.clientEngineVersion}</p>
+        )}
+        {loginCredential.deviceName && <p>Device Type: {loginCredential.deviceName}</p>}
+        {loginCredential.countryName && loginCredential.countryCode && (
+            <p>Country: {loginCredential.countryName} ({loginCredential.countryCode.toUpperCase()})</p>
+        )}
+        {loginCredential.$createdAt && (
+            <p>Session Created: {new Date(loginCredential.$createdAt).toLocaleString()}</p>
+        )}
+        {loginCredential.$updatedAt && (
+            <p>Session Updated: {new Date(loginCredential.$updatedAt).toLocaleString()}</p>
+        )}
+        {loginCredential.expire && (
+            <p>Session Expiry: {new Date(loginCredential.expire).toLocaleString()}</p>
+        )}
+        {loginCredential.factors && loginCredential.factors.length > 0 && (
+            <p>Multi-Factor Authentication: {loginCredential.factors.join(', ')}</p>
+        )}
+
       </div>
     </div>
   );

@@ -1,7 +1,17 @@
+import { account } from '../appwrite/appwriteService'
+
 function LogoutButton({ onLogout, showMessage }) {
-    const handleLogout = () => {
-      onLogout();
-      showMessage('Logged out successfully', 'success');
+
+    const handleLogout = async () => {
+      try {
+        const result = await account.deleteSessions();
+        console.log(result);
+        onLogout();
+        showMessage('Logged out successfully', 'success');
+      } catch (error) {
+        console.error('Logout failed:', error.message);
+        showMessage('Logout failed. Please try again.', 'error');
+      }
     };
   
     return (
